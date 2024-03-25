@@ -32,9 +32,9 @@ let renderOut = null;
 let observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      // Element is entering the viewport
-      renderOut = entry.target.id;
-      console.log(renderOut);
+    	// Element is entering the viewport
+    	renderOut = entry.target.id;
+    	// console.log(renderOut);
 
     } else {
       // Element is leaving the viewport
@@ -50,17 +50,17 @@ document.querySelectorAll('.scene').forEach(item => {
 
 function animate()
 {
-  requestAnimationFrame(animate);
+	requestAnimationFrame(animate);
 
-  if (renderOut === 'scene1') {
-    renderer.render(scene1, camera);
-  } else if (renderOut === 'scene2') {
-    renderer.render(scene2, camera);
-  } else if (renderOut === 'scene3') {
-    renderer.render(scene3, camera);
-  } else {
-    console.log('Eilidh Smells');
-  }
+	if (renderOut === 'scene1') {
+		renderer.render(scene1, camera);
+	} else if (renderOut === 'scene2') {
+		renderer.render(scene2, camera);
+	} else if (renderOut === 'scene3') {
+		renderer.render(scene3, camera);
+	} else {
+		console.log('Eilidh Smells');
+	}
 }
 
 animate();
