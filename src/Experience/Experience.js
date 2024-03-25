@@ -34,8 +34,7 @@ export default class Experience
         this.renderer = new Renderer();
 
         // ADDed to test
-        // this.SceneProcessor = new SceneProcessor();
-        this.Scene1 = new Scene1();
+        this.SceneProcessor = new SceneProcessor();
 
         // MultiScene Setup
         this.sceneElements = [];
