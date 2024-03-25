@@ -2,8 +2,12 @@
     box-sizing: border-box;
 }
 
+body, html {
+    margin: 0;
+}
+
 .webgl {
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     width: 100%;
@@ -17,7 +21,7 @@
 }
 
 .pannel {
-    height: 100vh;
+    height: 105vh;
     
     background-color: aquamarine;
     display: flex;

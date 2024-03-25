@@ -1,0 +1,14 @@
+
+export default class SceneProcessor
+{
+    constructor()
+    {
+        const documentScenes = document.querySelectorAll(".scene")
+        this.observer = new IntersectionObserver(entries => {
+            console.log(entries);
+        });
+
+        this.observer.observe(documentScenes);
+    }   
+}
+
