@@ -1,4 +1,10 @@
 import * as THREE from 'three'
+import Stats from 'stats.js'
+
+// Stats Setup
+var stats = new Stats();
+stats.showPanel( 1 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+document.body.appendChild( stats.dom );
 
 // Setup the scene, camera, and renderer
 const canvas = document.querySelector('canvas.webgl')
@@ -52,6 +58,8 @@ function animate()
 {
 	requestAnimationFrame(animate);
 
+	stats.begin();
+
 	if (renderOut === 'scene1') {
 		renderer.render(scene1, camera);
 	} else if (renderOut === 'scene2') {
@@ -61,6 +69,8 @@ function animate()
 	} else {
 		console.log('Eilidh Smells');
 	}
+
+	stats.end();
 }
 
 animate();
