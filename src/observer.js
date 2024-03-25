@@ -3,8 +3,10 @@ let observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         // Element is entering the viewport
+        console.log(entry.target.id + 'in');
       } else {
         // Element is leaving the viewport
+        console.log(entry.target.id + 'out');
       }
     });
   }, {
