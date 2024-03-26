@@ -20,7 +20,7 @@ function makeScene(elem) {
 	const scene = new THREE.Scene();
    
 	const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
-	camera.position.z = 5
+	camera.position.z = 10
    
 	return {scene, camera, elem};
 }
@@ -29,16 +29,99 @@ const sceneInitFunctionsByName = {
 	'scene1' : () => 
 	{
 		const {scene, camera} = makeScene();
-		const s1geometry = new THREE.BoxGeometry(0.6, 0.6, 0.6)
-		const s1material = new THREE.MeshBasicMaterial({ color: new THREE.Color('#ff0000') })
-		const s1mesh = new THREE.Mesh(s1geometry, s1material);
-		scene.add(s1mesh);
-		return (time, rect) => {
-			camera.aspect = rect.width / rect.height;
+
+		// Listen to mouse move event
+		window.addEventListener('mousemove', onMouseMove, false);
+
+		// Create geometry and material
+		const geometry = new THREE.BoxGeometry(0.6, 0.6, 0.6)
+		const material = new THREE.MeshBasicMaterial({ color: new THREE.Color('#000fff') })
+
+		// Create Hitbox geometry and material
+		const hitboxGeometry = new THREE.BoxGeometry(2, 2, 2)
+		const hitboxMaterial = new THREE.MeshBasicMaterial({visible: false})
+
+		// Create InstancedMesh
+		const instancedMesh = new THREE.InstancedMesh(geometry, material, 100)
+		scene.add(instancedMesh)
+
+		// Create HitboxMesh
+		const instancedHitboxes = new THREE.InstancedMesh(hitboxGeometry, hitboxMaterial, 100)
+		scene.add(instancedHitboxes);
+		for (let i = 0; i < 100; i++) 
+		{
+			let x = (i % 10) - 5;
+			let y = Math.floor(i / 10) - 5;
+			const tempObject = new THREE.Object3D();
+			tempObject.position.set(x, y, 0);
+			tempObject.updateMatrix();
+			instancedHitboxes.setMatrixAt(i, tempObject.matrix);
+		}
+
+		//Instaced Mesh Data
+		const rotations = new Array(100).fill(0);
+		const rotationSpeed = new Array(100).fill(0);
+		const rotationAcceleration = 0.0075;
+		const rotationDecay = 0.97;
+
+		// Raycaster setup
+		const raycaster = new THREE.Raycaster();
+		const mouse = new THREE.Vector2();
+		let hovered = new Set();
+
+		function onMouseMove(event) {
+			mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+			mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+			raycaster.setFromCamera(mouse, camera);
+
+			const intersects = raycaster.intersectObject(instancedHitboxes, true);
+
+			let newHovered = new Set();
+			intersects.forEach((intersect) => {
+				newHovered.add(intersect.instanceId);
+			});
+
+			hovered = newHovered;
+		}
+
+		// Clamp Function
+		function clamp(value, min, max)
+		{
+			return Math.min(Math.max(value, min), max);
+		}
+
+		// Animation loop
+		return () => 
+		{
+			// May need this
 			camera.updateProjectionMatrix();
-			s1mesh.rotation.y = time * .1;
+
+			// Update instances
+			for (let i = 0; i < 100; i++) {
+				let x = (i % 10) - 5;
+				let y = Math.floor(i / 10) - 5;
+				const tempObject = new THREE.Object3D();
+				tempObject.position.set(x, y, 0);
+
+				if (hovered.has(i)) {
+					rotationSpeed[i] += rotationAcceleration;
+					rotationSpeed[i] = clamp(rotationSpeed[i], 0, 0.085);
+				} else {
+					rotationSpeed[i] *= rotationDecay; 
+				}
+
+				// Update rotation based on speed
+				rotations[i] += rotationSpeed[i];
+				tempObject.rotation.y = rotations[i];
+
+
+				tempObject.updateMatrix();
+				instancedMesh.setMatrixAt(i, tempObject.matrix);
+			}
+			instancedMesh.instanceMatrix.needsUpdate = true;
 			renderer.render(scene, camera);
-		};
+		}
 	},
 	'scene2' : () =>
 	{
@@ -66,6 +149,69 @@ const sceneInitFunctionsByName = {
 			camera.updateProjectionMatrix();
 			s3mesh.rotation.y = time * .1;
 			renderer.render(scene, camera);
+		};
+	},
+	'scene4' : () =>
+	{
+		const {scene, camera} = makeScene();
+
+		/**
+		 * Model
+		 */
+		const numInstances = 6;
+		const group = new THREE.Group();
+
+		const geometry = new THREE.CylinderGeometry(1, 1, 0.2);
+		const material = new THREE.MeshBasicMaterial();
+
+		const instancedMesh = new THREE.InstancedMesh(geometry, material, numInstances);
+
+		group.add(instancedMesh);
+		scene.add(group);
+		group.rotateX(1.5);
+		group.rotateY(1.5);
+
+		// Instancing Position
+		const radius = 5;
+		for (let i = 0; i < numInstances; i++) {
+			const angle = (i / numInstances) * Math.PI;
+
+			const x = Math.cos(angle) * radius;
+			const y = Math.sin(angle) * radius;
+
+			const dummyObject = new THREE.Object3D();
+			dummyObject.position.set(x, y, 0);
+			dummyObject.lookAt(0, 0, 0);
+			dummyObject.rotateX(1.5);
+
+			dummyObject.updateMatrix();
+			instancedMesh.setMatrixAt(i, dummyObject.matrix);
+		}
+		instancedMesh.instanceMatrix.needsUpdate = true;
+
+		/**
+		 * Mouse
+		 */
+		const mouse = new THREE.Vector2();
+
+		document.addEventListener("mousemove", (event) =>
+		{
+			mouse.x = event.clientX / canvas.offsetWidth * 2 - 1
+			mouse.y = - (event.clientY / canvas.offsetHeight) * 2 + 1
+
+		})
+
+		let currentRotation = 0;
+		const dampingFactor = 0.025;
+
+		return () => {
+			// Update Instance Rotation
+			const targetRotation = mouse.y * 0.75;
+			currentRotation += (targetRotation - currentRotation) * dampingFactor;
+			group.rotation.z = currentRotation;
+		
+			// Render
+			renderer.render(scene, camera)
 		};
 	}
 }
