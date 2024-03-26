@@ -67,7 +67,7 @@ function animate()
 	} else if (renderOut === 'scene3') {
 		renderer.render(scene3, camera);
 	} else {
-		console.log('Eilidh Smells');
+		renderer.clear();
 	}
 
 	stats.end();
