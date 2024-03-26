@@ -1,4 +1,4 @@
-//import glsl from 'vite-plugin-glsl'
+import glsl from 'vite-plugin-glsl'
 
 export default {
     root: 'src/',
@@ -15,8 +15,8 @@ export default {
         emptyOutDir: true, // Empty the folder first
         sourcemap: true // Add sourcemap
     },
-    // plugins:
-    // [
-    //     glsl()
-    // ]
+    plugins:
+    [
+        glsl()
+    ]
 }
