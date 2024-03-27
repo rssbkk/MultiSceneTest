@@ -8,16 +8,33 @@ export default class Scene2
     {
         this.experience = new Experience();
         this.scene = this.experience.scene;
+        this.camera = this.experience.camera;
+        this.sizes = this.experience.sizes;
 
-        this.makeScene();
+        this.mouse = new THREE.Vector3( 0, 0, 1);
+
+        this.createGeometry();
+        this.mouseEvent();
+    }
+       
+
+    createGeometry() {
+        const geometry = new THREE.CylinderGeometry(5, 5, 2);
+        const material = new THREE.MeshBasicMaterial({ color: new THREE.Color('#0ff000') });
+        this.mesh = new THREE.Mesh(geometry, material);
+        this.mesh.rotation.x = Math.PI * 0.2;
+        this.scene.add(this.mesh);
     }
 
-    makeScene() 
-    {
-        const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshBasicMaterial({color: 'blue'});
-        const mesh = new THREE.Mesh(geometry, material);
+    mouseEvent() {
+        window.addEventListener('mousemove', (event) =>
+        {
+            this.mouse.x = (event.clientX / this.sizes.width) * 2 - 1;
+            this.mouse.y = -(event.clientY / this.sizes.height) * 2 + 1;
+		})
+    }
 
-        this.scene.add(mesh);
+    update() {
+        this.mesh.lookAt(this.mouse);
     }
 }

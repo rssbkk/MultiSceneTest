@@ -1,20 +1,34 @@
 import * as THREE from 'three'
 import Stats from 'stats.js'
 
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { GPUComputationRenderer } from 'three/examples/jsm/misc/GPUComputationRenderer.js';
-import {GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler.js';
+// import vertexShader from './shaders/basic/vertex.glsl';
+// import fragmentShader from './shaders/basic/fragment.glsl';
+// import simulationVertex from './shaders/simulation/simulationVertex.glsl';
+// import simulationFragment from './shaders/simulation/simulationFragment.glsl';
 
-import vertexShader from "./shaders/vertex.glsl";
-import fragmentShader from "./shaders/fragment.glsl";
-import simFragmentPosition from "./shaders/simFragment.glsl";
-import simFragmentVelocity from "./shaders/simFragmentVelocity.glsl";
-import simVertex from "./shaders/simVertex.glsl";
+// import texture1 from '/OKTO.png';
 
-function lerp(a, b, n) {
-	return (1 - n) * a + n * b;
-}
+// function lerp(a, b, n) {
+// 	return (1 - n) * a + n * b;
+// }
+
+// const loadImage = path => 
+// {
+//     return new Promise((resolve, reject) => 
+//     {
+//         const image = new Image();
+//         image.crossOrigin = 'Annonymous';
+//         image.src = path;
+//         image.onload = () =>
+//         {
+//             resolve(image)
+//         }
+//         image.onerror = e => 
+//         {
+//             reject(e)
+//         }
+//     })
+// }
 
 // Stats Setup
 var stats = new Stats();
@@ -144,96 +158,25 @@ const sceneInitFunctionsByName = {
 
 		// Listen to mouse move event
 		window.addEventListener('mousemove', onMouseMove, false);
+		let mouse = new THREE.Vector3( 0, 0, 1);
 
-		// Create geometry and material
-		const geometry = new THREE.BoxGeometry(0.6, 0.6, 0.6)
-		const material = new THREE.MeshBasicMaterial({ color: new THREE.Color('#000fff') })
-
-		// Create Hitbox geometry and material
-		const hitboxGeometry = new THREE.BoxGeometry(2, 2, 2)
-		const hitboxMaterial = new THREE.MeshBasicMaterial({visible: false})
-
-		// Create InstancedMesh
-		const instancedMesh = new THREE.InstancedMesh(geometry, material, 100)
-		scene.add(instancedMesh)
-
-		// Create HitboxMesh
-		const instancedHitboxes = new THREE.InstancedMesh(hitboxGeometry, hitboxMaterial, 100)
-		scene.add(instancedHitboxes);
-		for (let i = 0; i < 100; i++) 
-		{
-			let x = (i % 10) - 5;
-			let y = Math.floor(i / 10) - 5;
-			const tempObject = new THREE.Object3D();
-			tempObject.position.set(x, y, 0);
-			tempObject.updateMatrix();
-			instancedHitboxes.setMatrixAt(i, tempObject.matrix);
-		}
-
-		//Instaced Mesh Data
-		const rotations = new Array(100).fill(0);
-		const rotationSpeed = new Array(100).fill(0);
-		const rotationAcceleration = 0.0075;
-		const rotationDecay = 0.97;
-
-		// Raycaster setup
-		const raycaster = new THREE.Raycaster();
-		const mouse = new THREE.Vector2();
-		let hovered = new Set();
+		const geometry = new THREE.CylinderGeometry(5, 5, 2)
+		const material = new THREE.MeshBasicMaterial({ color: new THREE.Color('#0ff000') })
+		const mesh = new THREE.Mesh(geometry, material);
+		mesh.rotation.x = Math.PI * 0.2;
+		scene.add(mesh);
 
 		function onMouseMove(event) {
 			mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
 			mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-
-			raycaster.setFromCamera(mouse, camera);
-
-			const intersects = raycaster.intersectObject(instancedHitboxes, true);
-
-			let newHovered = new Set();
-			intersects.forEach((intersect) => {
-				newHovered.add(intersect.instanceId);
-			});
-
-			hovered = newHovered;
 		}
 
-		// Clamp Function
-		function clamp(value, min, max)
-		{
-			return Math.min(Math.max(value, min), max);
-		}
-
-		// Animation loop
-		return () => 
-		{
-			// May need this
-			// camera.updateProjectionMatrix();
-
-			// Update instances
-			for (let i = 0; i < 100; i++) {
-				let x = (i % 10) - 5;
-				let y = Math.floor(i / 10) - 5;
-				const tempObject = new THREE.Object3D();
-				tempObject.position.set(x, y, 0);
-
-				if (hovered.has(i)) {
-					rotationSpeed[i] += rotationAcceleration;
-					rotationSpeed[i] = clamp(rotationSpeed[i], 0, 0.085);
-				} else {
-					rotationSpeed[i] *= rotationDecay; 
-				}
-
-				// Update rotation based on speed
-				rotations[i] += rotationSpeed[i];
-				tempObject.rotation.y = rotations[i];
-
-
-				tempObject.updateMatrix();
-				instancedMesh.setMatrixAt(i, tempObject.matrix);
-			}
-			instancedMesh.instanceMatrix.needsUpdate = true;
+		return (time, rect) => {
+			
+			//mesh.rotation.x += 0.1
+			mesh.lookAt(mouse)
 			renderer.render(scene, camera);
-		}	
+		};
 	},
 	'scene3' : () =>
 	{
