@@ -40,21 +40,25 @@ export default class SceneProcessor
 
 	update(scene)
 	{
+		// Always clear the previous scene first.
+		this.renderer.instance.clear();
+	
+		// Now, switch to the appropriate scene update logic.
 		switch (scene) {
 			case 'scene1':
-				this.renderer.instance.clear();
-			  	this.Scene1.update();
-			  	break;
+				this.Scene1.update();
+				console.log('scene 1 erer');
+				break;
 			case 'scene2':
-				this.renderer.instance.clear();
 				this.Scene2.update();
 				break;
 			case 'scene3':
-			  this.Scene3.update();
-			  break;
+				this.Scene3.update();
+				break;
 			case null:
-				this.renderer.instance.clear();
-			  break;
+				// Here, you've already cleared the scene above.
+				// You could potentially add logic for a default state or leave it as is.
+				break;
 		}
 	}
 }
