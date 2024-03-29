@@ -1,6 +1,6 @@
-import Scene1 from "./scenes/Scene1.js";
-import Scene2 from "./scenes/Scene2.js";
-import Scene3 from "./scenes/Scene3.js";
+import Scene1 from "./Scenes/Scene1.js";
+import Scene2 from "./Scenes/Scene2.js";
+import Scene3 from "./Scenes/Scene3.js";
 
 export default class SceneFactory 
 {
