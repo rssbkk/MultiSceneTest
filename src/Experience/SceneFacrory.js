@@ -1,6 +1,6 @@
-import Scene1 from "../scenes/Scene1";
-import Scene2 from "../scenes/Scene2";
-import Scene3 from "../scenes/Scene3";
+import Scene1 from "./scenes/Scene1.js";
+import Scene2 from "./scenes/Scene2.js";
+import Scene3 from "./scenes/Scene3.js";
 
 export default class SceneFactory 
 {
@@ -14,7 +14,7 @@ export default class SceneFactory
     /**
      * @param {{sceneId: string, elem: HTMLElement}} _options
      */
-    
+
     static create(_options) {
       const SceneClass = this.#mapSceneToClass[_options.sceneId];
   

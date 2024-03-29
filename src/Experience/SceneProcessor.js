@@ -1,4 +1,3 @@
-import * as THREE from ' three';
 import Experience from './Experience';
 import SceneFactory from './SceneFacrory';
 
@@ -33,6 +32,8 @@ export default class SceneProcessor
         this.renderer.instance.setScissorTest(true);
 
         // Update all scenes
-        this.#scenes.forEach((scene) => scene.update());
+        this.#scenes.forEach((scene) => {
+            scene.update(); 
+        })
     }
 }

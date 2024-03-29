@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import Experience from '../Experience';
-import BaseScene from './BaseScene';
+import BaseScene from './BaseScene.js';
 
 export default class Scene3 extends BaseScene
 {
