@@ -15,6 +15,7 @@ export default class Scene1 extends BaseScene {
         100,
       );
       this.camera.position.z = 5;
+      this.camera.aspect = this.sizes.width / this.sizes.height;
 
       this.createMesh();
     }

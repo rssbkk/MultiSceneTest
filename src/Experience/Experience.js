@@ -44,11 +44,12 @@ export default class Experience {
   }
 
   resize() {
-    this.camera.resize();
-    this.renderer.resize();
+    // this.camera.instance.resize();
+    this.renderer.instance.resize();
   }
 
-  update() { // Order May Matter
+  update() {
+    // Order May Matter
     this.SceneProcessor.update();
   }
 }

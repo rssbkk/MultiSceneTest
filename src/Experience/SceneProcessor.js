@@ -1,5 +1,5 @@
 import Experience from "./Experience";
-import SceneFactory from "./SceneFacrory";
+import SceneFactory from "./SceneFactory";
 
 export default class SceneProcessor {
   #scenes = [];
@@ -23,16 +23,16 @@ export default class SceneProcessor {
   }
 
   update() {
-    // this.renderer.instance.setScissorTest(false);
-    // this.renderer.instance.clear(true, true);
-    // this.renderer.instance.setScissorTest(true);
-
-    this.renderer.instance.setClearColor(0xffffff);
     this.renderer.instance.setScissorTest(false);
-    this.renderer.instance.clear();
-
-    this.renderer.instance.setClearColor(0xff00ff);
+    this.renderer.instance.clear(true, true);
     this.renderer.instance.setScissorTest(true);
+
+    // this.renderer.instance.setClearColor(0xffffff);
+    // this.renderer.instance.setScissorTest(false);
+    // this.renderer.instance.clear();
+
+    // this.renderer.instance.setClearColor(0xff00ff);
+    // this.renderer.instance.setScissorTest(true);
 
     // Update all scenes
     this.#scenes.forEach((scene) => {

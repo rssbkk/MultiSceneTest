@@ -19,15 +19,8 @@ export default class Renderer {
       antialias: true,
     });
 
-    const width = this.canvas.clientWidth;
-    const height = this.canvas.clientHeight;
-
-    if (this.canvas.width !== width || this.canvas.height !== height) {
-      this.instance.setSize(width, height, false);
-    }
-
-    // this.instance.setSize(this.sizes.width / this.sizes.height);
-    // this.instance.setPixelRatio(this.sizes.pixelRatio);
+    this.instance.setPixelRatio(this.sizes.pixelRatio);
+    this.instance.setSize(this.sizes.width, this.sizes.height, false);
   }
 
   // External Functions
