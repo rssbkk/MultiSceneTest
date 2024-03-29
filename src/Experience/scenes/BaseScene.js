@@ -42,18 +42,7 @@ export default class BaseScene {
     };
   }
 
-  update() {
-    const { position, isOffscreen } = this.computeScenePosition();
-
-    if (isOffscreen) return;
-
-    this.renderer.instance.setScissor(
-      position.left,
-      position.bottom,
-      position.width,
-      position.height,
-    );
-
+  applyScissor(position) {
     this.renderer.instance.setViewport(
       position.left,
       position.bottom,
@@ -61,8 +50,20 @@ export default class BaseScene {
       position.height,
     );
 
-    // this can log each of the renderer, scene and camera
-    // console.log(this.renderer , "from the base Scene");
+    this.renderer.instance.setScissor(
+      position.left,
+      position.bottom,
+      position.width,
+      position.height,
+    );
+  }
+
+  update() {
+    const { position, isOffscreen } = this.computeScenePosition();
+
+    if (isOffscreen) return;
+
+    this.applyScissor(position);
 
     this.mesh.rotation.x += 0.01;
     this.mesh.rotation.y += 0.05;

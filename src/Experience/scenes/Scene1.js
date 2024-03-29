@@ -7,18 +7,26 @@ export default class Scene1 extends BaseScene {
     {
       console.log("Scene1 mounted", _options);
 
-      this.scene = new THREE.Scene();
-      this.camera = new THREE.PerspectiveCamera(
-        75,
-        this.sizes.width / this.sizes.height,
-        0.1,
-        100,
-      );
-      this.camera.position.z = 5;
-      this.camera.aspect = this.sizes.width / this.sizes.height;
+      this.initScene();
+      this.initCamera();
 
       this.createMesh();
     }
+  }
+
+  initScene() {
+    this.scene = new THREE.Scene();
+  }
+
+  initCamera() {
+    this.camera = new THREE.PerspectiveCamera(
+      75,
+      this.sizes.width / this.sizes.height,
+      0.1,
+      100,
+    );
+    this.camera.position.z = 5;
+    this.camera.aspect = this.sizes.width / this.sizes.height;
   }
 
   createMesh() {
