@@ -22,8 +22,9 @@ body, html {
 
 .pannel {
     height: 105vh;
-    
-    background-color: aquamarine;
+    background: linear-gradient(217deg, rgba(76, 255, 11, 0.8), rgba(255,0,0,0) 70.71%),
+                linear-gradient(127deg, rgba(0, 255, 191, 0.8), rgba(0,255,0,0) 70.71%),
+                linear-gradient(336deg, rgba(0, 205, 161, 0.8), rgba(0,0,255,0) 70.71%);
     display: flex;
     justify-content: center;
     align-items: center;

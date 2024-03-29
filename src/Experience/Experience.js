@@ -51,7 +51,7 @@ export default class Experience
 
     update() // Order May Matter
     {
-        this.renderer.update();
         this.camera.update();
+        this.renderer.update();
     }
 }
