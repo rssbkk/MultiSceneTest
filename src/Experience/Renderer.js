@@ -19,8 +19,15 @@ export default class Renderer
     {
         this.instance = new THREE.WebGLRenderer({
             canvas: this.canvas,
-            antialias: true
-        });
+            antialias: true,
+          });
+      
+          const width = this.canvas.clientWidth;
+          const height = this.canvas.clientHeight;
+      
+          if (this.canvas.width !== width || this.canvas.height !== height) {
+            this.instance.setSize(width, height, false);
+          }
     }
 
     // External Functions

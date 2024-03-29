@@ -34,8 +34,8 @@ export default class BaseScene {
                 height,
             );
             
-            // // this can log each of the renderer, scene and camera
-            // console.log(this.renderer , "from the base Scene");
+            // this can log each of the renderer, scene and camera
+            console.log(this.renderer , "from the base Scene");
 
             this.mesh.rotation.x += 0.01
             this.mesh.rotation.y += 0.05
