@@ -1,46 +1,79 @@
 import Experience from "../Experience";
 
 export default class BaseScene {
-    constructor(_options)
-    {
-        this.experience = new Experience();
-        this.sizes = this.experience.sizes;
-        this.renderer = this.experience.renderer;
+  constructor(_options) {
+    this.experience = new Experience();
+    this.sizes = this.experience.sizes;
+    this.renderer = this.experience.renderer;
 
-        this.id = _options.sceneId;
-        this.elem = _options.elem;
-    }
+    this.id = _options.sceneId;
+    this.elem = _options.elem;
+  }
 
-    update()
-    {
-        const rect = this.elem.getBoundingClientRect();
-        const { left, right, top, bottom, width, height } = rect;
+  computeScenePosition() {
+    const rect = this.elem.getBoundingClientRect();
+    const {
+      top,
+      right,
+      bottom: rectBottom,
+      left: rectLeft,
+      width,
+      height,
+    } = rect;
 
-        const isOffscreen =
-        bottom < 0 ||
-        top > this.sizes.height ||
-        right < 0 ||
-        left > this.sizes.width;
+    const isOffscreen =
+      rectBottom < 0 ||
+      top > this.sizes.height ||
+      right < 0 ||
+      rectLeft > this.sizes.width;
 
-        if (!isOffscreen) {
-            const positiveYUpBottom = this.sizes.height - bottom;
+    const bottom = this.sizes.height - rectBottom;
 
-            this.renderer.instance.setScissor(left, positiveYUpBottom, width, height);
+    return {
+      position: {
+        width,
+        height,
+        left: rectLeft,
+        top,
+        bottom,
+        right,
+      },
+      isOffscreen,
+    };
+  }
 
-            this.renderer.instance.setViewport(
-                left,
-                positiveYUpBottom,
-                width,
-                height,
-            );
-            
-            // this can log each of the renderer, scene and camera
-            console.log(this.renderer , "from the base Scene");
+  applyScissor(position) {
+    this.renderer.instance.setViewport(
+      position.left,
+      position.bottom,
+      position.width,
+      position.height,
+    );
 
-            this.mesh.rotation.x += 0.01
-            this.mesh.rotation.y += 0.05
+    this.renderer.instance.setScissor(
+      position.left,
+      position.bottom,
+      position.width,
+      position.height,
+    );
+  }
 
-            this.renderer.instance.render( this.scene, this.camera );
-        }
-    }
+  update(time, deltaTime) {
+    const { position, isOffscreen } = this.computeScenePosition();
+
+    if (isOffscreen) return;
+
+    this.applyScissor(position);
+
+    this.renderer.instance.render(this.scene, this.camera);
+
+    this.updateScene();
+  }
+
+  updateScene()
+  {
+    throw new Error(
+        `BaseScene chidlren class: ${this.id} does not implement updateScene method.`
+    )
+  }
 }
