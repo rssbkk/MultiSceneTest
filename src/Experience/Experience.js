@@ -3,7 +3,6 @@ import Sizes from "./utils/Sizes.js";
 import Time from "./utils/Time.js";
 import Camera from './Camera.js';
 import Renderer from './Renderer.js';
-import SceneProcessor from './sceneProcessor.js';
 
 let instance = null;
 
@@ -31,12 +30,6 @@ export default class Experience
         this.camera = new Camera();
         this.renderer = new Renderer();
 
-        // ADDed to test
-        this.SceneProcessor = new SceneProcessor();
-
-        // MultiScene Setup
-        this.sceneElements = [];
-
         // Sizes Resize Event
         this.sizes.on('resize', ()=>
         {
@@ -58,8 +51,7 @@ export default class Experience
 
     update() // Order May Matter
     {
-        this.camera.update();
         this.renderer.update();
-        this.SceneProcessor.update();
+        this.camera.update();
     }
 }
