@@ -12,16 +12,18 @@ export default class Renderer {
     this.setInstance();
   }
 
-  // Internal Functions
-  setInstance() {
-    this.instance = new THREE.WebGLRenderer({
-      canvas: this.canvas,
-      antialias: true,
-    });
+    // Internal Functions
+    setInstance()
+    {
+        this.instance = new THREE.WebGLRenderer({
+            canvas: this.canvas,
+            antialias: true
+        });
+
 
     this.instance.setPixelRatio(this.sizes.pixelRatio);
     this.instance.setSize(this.sizes.width, this.sizes.height, false);
-  }
+    }
 
   // External Functions
   resize() {
