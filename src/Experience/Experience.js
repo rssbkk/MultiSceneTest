@@ -4,6 +4,8 @@ import Time from "./utils/Time.js";
 import Camera from './Camera.js';
 import Renderer from './Renderer.js';
 
+import SceneProcessor from './SceneProcessor.js';
+
 let instance = null;
 
 export default class Experience
@@ -26,9 +28,12 @@ export default class Experience
         // Setup
         this.sizes = new Sizes();
         this.time = new Time();
-        this.scene = new THREE.Scene();
-        this.camera = new Camera();
+        // this.scene = new THREE.Scene();
+        // this.camera = new Camera();
         this.renderer = new Renderer();
+
+        // Test Parts
+        this.SceneProcessor = new SceneProcessor();
 
         // Sizes Resize Event
         this.sizes.on('resize', ()=>
@@ -51,7 +56,6 @@ export default class Experience
 
     update() // Order May Matter
     {
-        this.camera.update();
-        this.renderer.update();
+        this.SceneProcessor.update();
     }
 }
