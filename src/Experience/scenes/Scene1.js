@@ -4,14 +4,13 @@ import BaseScene from "./BaseScene";
 export default class Scene1 extends BaseScene {
   constructor(_options) {
     super(_options);
-    {
-      console.log("Scene1 mounted", _options);
 
-      this.initScene();
-      this.initCamera();
+    console.log("Scene1 mounted", _options);
 
-      this.createMesh();
-    }
+    this.initScene();
+    this.initCamera();
+
+    this.createMesh();
   }
 
   initScene() {
@@ -37,4 +36,13 @@ export default class Scene1 extends BaseScene {
     this.mesh = new THREE.Mesh(geometry, material);
     this.scene.add(this.mesh);
   }
+
+  updateScene() {
+    this.mesh.rotation.x += 0.01;
+    this.mesh.rotation.y += 0.05;
+  }
+
+  destroy() {}
+
+  resize() {}
 }

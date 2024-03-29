@@ -1,5 +1,8 @@
 import Experience from "../Experience";
 
+/**
+ * BaseScene : Abstract class consumed by Scenes
+ */
 export default class BaseScene {
   constructor(_options) {
     this.experience = new Experience();
@@ -58,16 +61,26 @@ export default class BaseScene {
     );
   }
 
-  update() {
+  update(time, deltaTime) {
     const { position, isOffscreen } = this.computeScenePosition();
 
     if (isOffscreen) return;
 
     this.applyScissor(position);
 
-    this.mesh.rotation.x += 0.01;
-    this.mesh.rotation.y += 0.05;
-
     this.renderer.instance.render(this.scene, this.camera);
+
+    // This is an abstract method
+    // Since we are using Javascript there is no abstract class/method 🤷
+    this.updateScene();
+  }
+
+  // This is an abstract method
+  // Since we are using Javascript there is no abstract class/method 🤷
+  // ! This method needs to be implemented in children BaseScene classes !
+  updateScene() {
+    throw new Error(
+      `BaseScene children class: ${this.id} does not implement updateScene method.`,
+    );
   }
 }
