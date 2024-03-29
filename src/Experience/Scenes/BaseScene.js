@@ -9,7 +9,6 @@ export default class BaseScene {
 
         this.id = _options.sceneId;
         this.elem = _options.elem;
-
     }
 
     update()
