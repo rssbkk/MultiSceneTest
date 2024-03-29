@@ -2,7 +2,8 @@ import * as THREE from "three";
 import BaseScene from "./BaseScene";
 
 export default class Scene1 extends BaseScene {
-  constructor(_options) {
+  constructor(_options) 
+  {
     super(_options);
 
     console.log("Scene1 mounted", _options);
